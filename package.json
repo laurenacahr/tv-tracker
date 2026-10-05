@@ -1,0 +1,30 @@
+{
+  "name": "tv-tracker",
+  "private": true,
+  "description": "TV Tracker",
+  "type": "module",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "vite build web",
+    "start": "node server/index.js",
+    "dev": "concurrently --kill-others-on-fail -n db,api,web -c gray,blue,green \"npm:dev:db\" \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:db": "npx -y firebase-tools@15 emulators:start --only firestore --project demo-tv-tracker",
+    "dev:api": "wait-on -t 120000 tcp:127.0.0.1:8081 && FIRESTORE_EMULATOR_HOST=127.0.0.1:8081 GCLOUD_PROJECT=demo-tv-tracker PORT=8790 node --watch server/index.js",
+    "dev:web": "vite web"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "express": "^5.2.1",
+    "firebase-admin": "^14.5.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4",
+    "vite": "^8.3.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "wait-on": "^8.0.5"
+  }
+}

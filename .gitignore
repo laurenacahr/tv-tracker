@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+*.log
+.firebase/
+.DS_Store
+*.local
+
+# Credentials: never commit a Firebase admin key. A key dropped anywhere in the
+# repo under the name Firebase gives it is caught here.
+.secrets/
+*firebase-adminsdk*.json
+service-account*.json

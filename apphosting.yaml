@@ -1,0 +1,11 @@
+# App Hosting backend "tv-tracker".
+#   Root directory: /  (this repo is the app)
+# One Node server (server/index.js) serves both the built React app and /api.
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+
+
+scripts:
+  buildCommand: npm run build
+  runCommand: npm start
