@@ -20,7 +20,10 @@ export default function Compare() {
   };
 
   const cutBy = {};
-  for (const s of SHOWS) for (const u of users) if (getPick(u.id, s.id).kickOut) (cutBy[s.id] ||= []).push(u.name);
+  for (const s of SHOWS) for (const u of users) {
+    const p = getPick(u.id, s.id);
+    if (p.kickOut) (cutBy[s.id] ||= []).push({ name: u.name, notes: p.notes });
+  }
   const cutIds = Object.keys(cutBy).map(Number);
 
   const show = SHOWS.find((s) => s.id === Number(showId));
@@ -124,8 +127,12 @@ export default function Compare() {
         <div className="card-list">
           {cutIds.map((id) => (
             <div className="mini-card" key={id}>
-              <div className="mini-card-title">{SHOWS.find((s) => s.id === id).title}</div>
-              <div className="mini-card-meta">{cutBy[id].join(", ")}</div>
+              <div>
+                <div className="mini-card-title">{SHOWS.find((s) => s.id === id).title}</div>
+                {cutBy[id].map((c) => (
+                  <div className="mini-card-meta" key={c.name}>{c.name}{c.notes && ` — ${c.notes}`}</div>
+                ))}
+              </div>
             </div>
           ))}
         </div>

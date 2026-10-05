@@ -9,7 +9,7 @@ export default function Additions() {
 
   const mine = entriesFor(me.id);
   const full = mine.length >= CUSTOM_ENTRY_CAP;
-  const cutShows = SHOWS.filter((s) => getPick(me.id, s.id).kickOut);
+  const cutShows = SHOWS.map((s) => ({ ...s, ...getPick(me.id, s.id) })).filter((s) => s.kickOut);
 
   const add = () => {
     const t = title.trim();
@@ -48,8 +48,10 @@ export default function Additions() {
       <div className="card-list">
         {cutShows.length ? cutShows.map((s) => (
           <div className="mini-card" key={s.id}>
-            <div className="mini-card-title">{s.title}</div>
-            <div className="mini-card-meta">#{s.nytRank}</div>
+            <div>
+              <div className="mini-card-title">{s.title}</div>
+              <div className="mini-card-meta">NYT #{s.nytRank}{s.notes && ` — ${s.notes}`}</div>
+            </div>
           </div>
         )) : <p className="empty-note">Nothing marked to cut yet — do that from a show's detail page.</p>}
       </div>
