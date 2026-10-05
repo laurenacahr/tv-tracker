@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SHOWS, TIERS } from "../lib/shows.js";
+import { SHOWS, STATUSES, TIERS } from "../lib/shows.js";
 import { useStore } from "../lib/store.jsx";
 import { StatusPill, TierChip, UserDot } from "./ui.jsx";
 
@@ -19,12 +19,7 @@ export default function Compare() {
     return { counts, tiered };
   };
 
-  const cutBy = {};
-  for (const s of SHOWS) for (const u of users) {
-    const p = getPick(u.id, s.id);
-    if (p.kickOut) (cutBy[s.id] ||= []).push({ name: u.name, notes: p.notes });
-  }
-  const cutIds = Object.keys(cutBy).map(Number);
+  const cutShows = SHOWS.filter((s) => users.some((u) => getPick(u.id, s.id).kickOut));
 
   const show = SHOWS.find((s) => s.id === Number(showId));
   const owner = (id) => users.find((u) => u.id === id);
@@ -123,18 +118,44 @@ export default function Compare() {
       ) : <p className="empty-note">No one has proposed additions yet.</p>}
 
       <h3 className="section-title">Proposed cuts</h3>
-      {cutIds.length ? (
-        <div className="card-list">
-          {cutIds.map((id) => (
-            <div className="mini-card" key={id}>
-              <div>
-                <div className="mini-card-title">{SHOWS.find((s) => s.id === id).title}</div>
-                {cutBy[id].map((c) => (
-                  <div className="mini-card-meta" key={c.name}>{c.name}{c.notes && ` — ${c.notes}`}</div>
+      {cutShows.length ? (
+        <div className="table-scroll">
+          <table className="compare-table cuts-table">
+            <thead>
+              <tr>
+                <th>Show</th>
+                {users.map((u) => (
+                  <th key={u.id}><span className="user-tag"><UserDot index={userColorIndex(u.id)} />{u.name}</span></th>
                 ))}
-              </div>
-            </div>
-          ))}
+              </tr>
+            </thead>
+            <tbody>
+              {cutShows.map((s) => {
+                const id = s.id;
+                return (
+                  <tr key={id}>
+                    <td className="cut-show">
+                      <div className="mini-card-title">{s.title}</div>
+                      <div className="helper">NYT #{s.nytRank}</div>
+                    </td>
+                    {users.map((u) => {
+                      const p = getPick(u.id, id);
+                      const status = STATUSES.find((x) => x.id === p.status)?.label;
+                      return (
+                        <td key={u.id} className="cut-cell" title={`${u.name}: ${status}`}>
+                          <div className="nowrap">
+                            {p.tier !== null ? <TierChip tier={p.tier} /> : <span className="helper">—</span>}
+                            {p.kickOut && <span className="pill pill-cut">✂ cut</span>}
+                          </div>
+                          {p.kickOut && p.notes && <div className="mini-card-meta cut-note">{p.notes}</div>}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       ) : <p className="empty-note">No cuts proposed yet.</p>}
     </>

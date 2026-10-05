@@ -185,6 +185,13 @@
   .search-box { width: 100%; max-width: 360px; }
 
   .card-list { display: flex; flex-direction: column; gap: 8px; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.cuts-table td { vertical-align: top; }
+  table.cuts-table td.cut-show { min-width: 140px; }
+  table.cuts-table td.cut-cell { min-width: 150px; max-width: 240px; }
+  table.cuts-table td.cut-cell .pill-cut { margin-left: 6px; }
+  table.cuts-table th { white-space: nowrap; }
+  .cut-note { margin-top: 4px; }
   .mini-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
   .mini-card-title { font-weight: 500; }
   .mini-card-meta { color: var(--muted); font-size: 12px; }
