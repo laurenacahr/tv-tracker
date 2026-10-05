@@ -27,6 +27,9 @@ export const TIERS = [
   { label: "1–20 (best)", short: "1–20" },
 ];
 
+// The tier a show's NYT rank falls in: 1–20 is tier 5, 81–100 is tier 1.
+export const nytTier = (nytRank) => 5 - Math.floor((nytRank - 1) / 20);
+
 export const STATUSES = [
   { id: "not_watched", label: "Not watched" },
   { id: "partial", label: "Partially watched" },

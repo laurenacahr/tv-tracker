@@ -117,6 +117,11 @@
   table.list tr.row-clickable { cursor: pointer; }
   table.list tr.row-clickable:hover td { background: var(--surface-2); }
   .rank-cell { color: var(--muted); font-variant-numeric: tabular-nums; width: 40px; }
+  .nowrap { white-space: nowrap; }
+  .vs-nyt { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .vs-up { color: var(--good); }
+  .vs-down { color: var(--critical); }
+  .vs-same { color: var(--text-2); font-weight: 500; }
   .controls-row { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; font-size: 14px; }
   .controls-row label { color: var(--text-2); }
 
@@ -196,7 +201,7 @@
 
   @media (max-width: 640px) {
     table.list th:nth-child(4), table.list td:nth-child(4) { display: none; }
-    /* My List: tier is the important column here, so drop "my rank" (5th) instead of tier (4th) */
+    /* My List: tier (4th) and vs NYT (5th) matter most here, so drop "my rank" (6th) instead */
     table.list.mylist th:nth-child(4), table.list.mylist td:nth-child(4) { display: table-cell; }
-    table.list.mylist th:nth-child(5), table.list.mylist td:nth-child(5) { display: none; }
+    table.list.mylist th:nth-child(6), table.list.mylist td:nth-child(6) { display: none; }
   }

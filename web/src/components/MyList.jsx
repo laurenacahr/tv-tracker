@@ -1,6 +1,20 @@
-import { SHOWS, STATUSES } from "../lib/shows.js";
+import { SHOWS, STATUSES, TIERS, nytTier } from "../lib/shows.js";
 import { useStore } from "../lib/store.jsx";
 import { StatusPill, TierChip } from "./ui.jsx";
+
+// How your tier compares to where NYT ranked the show: +2 means two tiers higher than NYT.
+function VsNyt({ tier, nytRank }) {
+  if (tier === null || tier === undefined) return <span className="helper">—</span>;
+  const nyt = nytTier(nytRank);
+  const diff = tier - nyt;
+  const title = `NYT: ${TIERS[nyt].label}`;
+  if (diff === 0) return <span className="vs-nyt vs-same" title={title}>Same</span>;
+  return (
+    <span className={`vs-nyt ${diff > 0 ? "vs-up" : "vs-down"}`} title={title}>
+      {diff > 0 ? `+${diff}` : `−${-diff}`}
+    </span>
+  );
+}
 
 export default function MyList({ onOpenShow, sort, setSort, filter, setFilter }) {
   const { me, getPick } = useStore();
@@ -38,7 +52,7 @@ export default function MyList({ onOpenShow, sort, setSort, filter, setFilter })
       </div>
       {rows.length ? (
         <table className="list mylist">
-          <thead><tr><th>#</th><th>Show</th><th>Status</th><th>Tier</th><th>My rank</th></tr></thead>
+          <thead><tr><th>#</th><th>Show</th><th>Status</th><th>Tier</th><th className="nowrap" title="Your tier compared with NYT's: + means you rank it higher">vs NYT</th><th>My rank</th></tr></thead>
           <tbody>
             {rows.map(({ show, pick }) => {
               const dup = pick.personalRank != null && rankCounts[pick.personalRank] > 1;
@@ -52,6 +66,7 @@ export default function MyList({ onOpenShow, sort, setSort, filter, setFilter })
                     {pick.kickOut && <> <span className="pill pill-cut">cut</span></>}
                   </td>
                   <td><TierChip tier={pick.tier} /></td>
+                  <td><VsNyt tier={pick.tier} nytRank={show.nytRank} /></td>
                   <td>
                     {pick.personalRank != null
                       ? <>{pick.personalRank}{dup && <> <span title="Another show shares this rank" style={{ color: "var(--warning)" }}>⚠</span></>}</>
