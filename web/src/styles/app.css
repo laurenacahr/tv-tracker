@@ -79,7 +79,16 @@
   }
   header.app-header h1 { font-size: 19px; margin: 0; }
   .user-switch { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--text-2); }
+  .editing-badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
+    border: 2px solid var(--who); background: color-mix(in srgb, var(--who) 14%, var(--surface));
+    font-size: 17px; color: var(--text);
+  }
+  .editing-badge .user-dot { width: 12px; height: 12px; }
+  .editing-label { font-size: 14px; color: var(--text-2); }
+  .modal-editing { margin: -6px 0 18px; }
   .icon-btn { padding: 4px 8px; color: var(--text-2); }
+  .switch-btn { padding: 4px 8px; color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
   .name-input { width: 160px; max-width: 100%; }
   .name-error { flex-basis: 100%; color: var(--critical); font-size: 13px; }
   .user-tag {
@@ -181,6 +190,9 @@
   .picker-wrap { max-width: 420px; margin: 60px auto; text-align: center; }
   .picker-list { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; }
   .picker-list button { text-align: left; padding: 10px 14px; }
+  .picker-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .picker-row > button:first-child, .picker-row > .name-input { flex: 1; }
+  .picker-list .picker-row .icon-btn { padding: 10px 12px; }
 
   @media (max-width: 640px) {
     table.list th:nth-child(4), table.list td:nth-child(4) { display: none; }

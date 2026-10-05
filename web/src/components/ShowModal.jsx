@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { KICKOUT_CAP, SHOWS, STATUSES, TIERS } from "../lib/shows.js";
 import { useStore } from "../lib/store.jsx";
+import { EditingAs } from "./ui.jsx";
 
 // Runs `fn` once the value has stopped changing for `ms`. The pending call is
 // deliberately not cancelled on unmount, so closing the modal right after a
@@ -16,7 +17,7 @@ function useDebouncedSave(fn, ms) {
 }
 
 export default function ShowModal({ showId, onClose }) {
-  const { me, getPick, setPick, countKickouts } = useStore();
+  const { me, getPick, setPick, countKickouts, userColorIndex } = useStore();
   const show = SHOWS.find((s) => s.id === showId);
   const pick = getPick(me.id, showId);
 
@@ -54,6 +55,7 @@ export default function ShowModal({ showId, onClose }) {
           </div>
           <button className="ghost" aria-label="Close" onClick={onClose}>✕</button>
         </div>
+        <div className="modal-editing"><EditingAs name={me.name} index={userColorIndex(me.id)} /></div>
 
         <div className="field">
           <label className="field-label">Status</label>

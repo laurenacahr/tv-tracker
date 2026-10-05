@@ -13,3 +13,12 @@ export function TierChip({ tier }) {
 export function UserDot({ index }) {
   return <span className="user-dot" style={{ background: `var(--u-${index % 7})` }} />;
 }
+
+// Loud reminder of whose data is being edited, tinted with that person's color.
+export function EditingAs({ name, index }) {
+  return (
+    <span className="editing-badge" style={{ "--who": `var(--u-${index % 7})` }}>
+      <UserDot index={index} /><span className="editing-label">Editing as</span> <strong>{name}</strong>
+    </span>
+  );
+}

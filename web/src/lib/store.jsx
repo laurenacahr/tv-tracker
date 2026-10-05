@@ -101,11 +101,10 @@ export function StoreProvider({ children }) {
       },
 
       // Not optimistic: the server may refuse a taken name, and the caller shows that error.
-      async renameMe(name) {
-        if (!me) return;
-        await api.patch(`/api/tv/users/${me.id}`, { name });
+      async renameUser(id, name) {
+        await api.patch(`/api/tv/users/${id}`, { name });
         version.current++;
-        setData((d) => ({ ...d, users: d.users.map((u) => (u.id === me.id ? { ...u, name } : u)) }));
+        setData((d) => ({ ...d, users: d.users.map((u) => (u.id === id ? { ...u, name } : u)) }));
         refresh();
       },
 
