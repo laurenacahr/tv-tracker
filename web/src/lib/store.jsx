@@ -92,13 +92,21 @@ export function StoreProvider({ children }) {
 
       pickProfile(id) { writeMe(id); setMeIdState(id); },
 
+      // Throws if the server refuses the name (e.g. taken); the caller shows the error.
       async addUser(name) {
-        try {
-          const u = await api.post("/api/tv/users", { name });
-          await refresh();
-          writeMe(u.id);
-          setMeIdState(u.id);
-        } catch (e) { alert(e.message); }
+        const u = await api.post("/api/tv/users", { name });
+        await refresh();
+        writeMe(u.id);
+        setMeIdState(u.id);
+      },
+
+      // Not optimistic: the server may refuse a taken name, and the caller shows that error.
+      async renameMe(name) {
+        if (!me) return;
+        await api.patch(`/api/tv/users/${me.id}`, { name });
+        version.current++;
+        setData((d) => ({ ...d, users: d.users.map((u) => (u.id === me.id ? { ...u, name } : u)) }));
+        refresh();
       },
 
       setPick(showId, patch) {

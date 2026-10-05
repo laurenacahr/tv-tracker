@@ -78,7 +78,10 @@
     padding: 18px 0 10px; gap: 12px; flex-wrap: wrap;
   }
   header.app-header h1 { font-size: 19px; margin: 0; }
-  .user-switch { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-2); }
+  .user-switch { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 14px; color: var(--text-2); }
+  .icon-btn { padding: 4px 8px; color: var(--text-2); }
+  .name-input { width: 160px; max-width: 100%; }
+  .name-error { flex-basis: 100%; color: var(--critical); font-size: 13px; }
   .user-tag {
     display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--text);
   }

@@ -91,8 +91,18 @@ tv.get("/state", async (req, res) => {
   });
 });
 
+// Names are compared ignoring case, so "sam" and "Sam" can't both exist.
+async function requireUniqueName(name, exceptId = null) {
+  const snap = await profiles.get();
+  const lower = name.toLowerCase();
+  if (snap.docs.some((d) => d.id !== exceptId && d.data().name?.toLowerCase() === lower)) {
+    throw new HttpError(409, `Someone is already called "${name}"`);
+  }
+}
+
 tv.post("/users", async (req, res) => {
   const name = cleanString(req.body?.name, 40, { required: true, field: "name" });
+  await requireUniqueName(name);
   const ref = profiles.doc();
   await ref.set({ name, createdAt: Date.now() });
   res.status(201).json({ id: ref.id, name });
@@ -103,6 +113,16 @@ async function requireUser(userId) {
   const snap = await profiles.doc(userId).get();
   if (!snap.exists) throw new HttpError(404, "unknown user");
 }
+
+// Picks and entries point at the profile id, so a rename carries everything with it.
+tv.patch("/users/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const name = cleanString(req.body?.name, 40, { required: true, field: "name" });
+  await requireUser(userId);
+  await requireUniqueName(name, userId);
+  await profiles.doc(userId).update({ name });
+  res.json({ id: userId, name });
+});
 
 tv.put("/picks/:userId/:showId", async (req, res) => {
   const { userId } = req.params;
