@@ -192,6 +192,11 @@
   table.cuts-table td.cut-cell .pill-cut { margin-left: 6px; }
   table.cuts-table th { white-space: nowrap; }
   .cut-note { margin-top: 4px; }
+  table.cuts-table td.watch-cell { vertical-align: middle; }
+  .watch-check {
+    display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+    border-radius: 6px; background: var(--good); color: #fff; font-weight: 700; font-size: 14px;
+  }
   .mini-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
   .mini-card-title { font-weight: 500; }
   .mini-card-meta { color: var(--muted); font-size: 12px; }

@@ -20,6 +20,9 @@ export default function Compare() {
   };
 
   const cutShows = SHOWS.filter((s) => users.some((u) => getPick(u.id, s.id).kickOut));
+  // Most-wanted first, so it doubles as "what should we watch together?"
+  const watchCount = (s) => users.filter((u) => getPick(u.id, s.id).watchlisted).length;
+  const watchShows = SHOWS.filter((s) => watchCount(s) > 0).sort((a, b) => watchCount(b) - watchCount(a) || a.nytRank - b.nytRank);
 
   const show = SHOWS.find((s) => s.id === Number(showId));
   const owner = (id) => users.find((u) => u.id === id);
@@ -158,6 +161,40 @@ export default function Compare() {
           </table>
         </div>
       ) : <p className="empty-note">No cuts proposed yet.</p>}
+
+      <h3 className="section-title">Watchlists</h3>
+      {watchShows.length ? (
+        <div className="table-scroll">
+          <table className="compare-table cuts-table">
+            <thead>
+              <tr>
+                <th>Show</th>
+                {users.map((u) => (
+                  <th key={u.id}><span className="user-tag"><UserDot index={userColorIndex(u.id)} />{u.name}</span></th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {watchShows.map((s) => (
+                <tr key={s.id}>
+                  <td className="cut-show">
+                    <div className="mini-card-title">{s.title}</div>
+                    <div className="helper">NYT #{s.nytRank}</div>
+                  </td>
+                  {users.map((u) => {
+                    const on = getPick(u.id, s.id).watchlisted;
+                    return (
+                      <td key={u.id} className="watch-cell">
+                        {on ? <span className="watch-check" aria-label={`${u.name} wants to watch`}>✓</span> : <span className="helper">—</span>}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p className="empty-note">No one has added shows to their watchlist yet.</p>}
     </>
   );
 }
