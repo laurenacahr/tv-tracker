@@ -159,6 +159,19 @@ tv.post("/entries", async (req, res) => {
   res.status(201).json({ id: ref.id });
 });
 
+// Only the person who proposed an addition can change it.
+tv.patch("/entries/:id", async (req, res) => {
+  const ref = entries.doc(req.params.id);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpError(404, "unknown entry");
+  if (snap.data().userId !== req.body?.userId) throw new HttpError(403, "You can only edit your own additions");
+  const patch = {};
+  if ("title" in req.body) patch.title = cleanString(req.body.title, 120, { required: true, field: "title" });
+  if ("notes" in req.body) patch.notes = cleanString(req.body.notes, 500, { field: "notes" });
+  await ref.update(patch);
+  res.json({ ok: true });
+});
+
 tv.delete("/entries/:id", async (req, res) => {
   await entries.doc(req.params.id).delete();
   res.json({ ok: true });

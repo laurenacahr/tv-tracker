@@ -200,6 +200,8 @@
   .mini-card { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
   .mini-card-title { font-weight: 500; }
   .mini-card-meta { color: var(--muted); font-size: 12px; }
+  .mini-card.edit-card { flex-direction: column; align-items: stretch; gap: 8px; }
+  .card-actions { display: flex; gap: 2px; flex: none; }
 
   .section-title { font-size: 15px; font-weight: 600; margin: 26px 0 10px; }
   .helper { color: var(--muted); font-size: 12px; margin-top: 4px; }

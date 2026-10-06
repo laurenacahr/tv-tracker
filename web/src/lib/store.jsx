@@ -122,6 +122,14 @@ export function StoreProvider({ children }) {
         return write(() => api.post("/api/tv/entries", { userId: me.id, title, notes }));
       },
 
+      updateEntry(id, patch) {
+        if (!me) return;
+        return write(
+          () => api.patch(`/api/tv/entries/${id}`, { userId: me.id, ...patch }),
+          () => setData((d) => ({ ...d, entries: d.entries.map((e) => (e.id === id ? { ...e, ...patch } : e)) })),
+        );
+      },
+
       removeEntry(id) {
         return write(
           () => api.del(`/api/tv/entries/${id}`),
